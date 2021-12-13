@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:50:00 by jlong             #+#    #+#             */
-/*   Updated: 2021/12/13 15:54:56 by jlong            ###   ########.fr       */
+/*   Updated: 2021/12/13 18:11:28 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ typedef struct	s_philo
 	pthread_t	thread;
 	pthread_t	right_fork;
 	pthread_mutex_t fork;
+	pthread_mutex_t	eat;
+	
 }				t_philo;
 
 int	main(void);

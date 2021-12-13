@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2021/12/13 15:56:32 by jlong            ###   ########.fr       */
+/*   Updated: 2021/12/13 19:06:43 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@ void	ft_error()
 }
 int	get_data(int argc, char **av, t_data *data)
 {
-    if (argc != 5)
-    {
-        return (0);
-    }
     &data->number_of_philo = ft_atoi(av[1]);
     &data->time_to_die = ft_atoi(av[2]);
     &data->time_to_eat = ft_atoi(av[3]);
@@ -29,6 +25,7 @@ int	get_data(int argc, char **av, t_data *data)
     &data->number_eat = ft_atoi(av[5]);
     return (1);
 }
+
 void	init_struct_philo(t_philo *philo)
 {
 	philo->left_fork = 0;
@@ -45,20 +42,32 @@ int creat_philo(t_data *data, t_philo *philo)
         return 0;
 	while (i < data->number_of_philo)
 	{
-		init_struct_philo(philo);
+		init_struct_philo(philo[i]);
 		philo->philo = i;
+        pthread_create(&philo[i]->thread, NULL, &routine, NULL);
+        //verif le tread 
+		i++;
+	}
+    i = 0;
+    while (i < data->number_of_philo)
+	{
+        pthread_join(&philo[i]->thread, NULL);
+        //verif le tread 
 		i++;
 	}
     return (1);
 }
 
-int	init_mutex(t_data *data, t_philo *philo)
+int	init_mutex(int argc, t_data *data, t_philo *philo)
 {
 	int	i;
 
 	i = 0;
-	while (i <= data->number_of_philo)
+	while (i < data->number_of_philo)
 	{
+        pthread_mutex_init(philo[i]->fork, NULL);
+        if (data->number_eat > 0)
+            pthread_mutex_init(philo[i]->eat, NULL);
 		i++;
 	}
 	return (1);
@@ -83,7 +92,7 @@ int main(int argc, char **av)
         free(philo);
         return (1);
     }
-	if (!init_mutex(&data, philo))
+	if (!init_mutex(argc, &data, philo))
 	{
 		
 		return (1);
