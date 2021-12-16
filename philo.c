@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2021/12/14 14:57:48 by jlong            ###   ########.fr       */
+/*   Updated: 2021/12/16 12:56:19 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,24 @@ t_data  *get_data(int argc, char **av)
     return (data);
 }
 
-void	init_struct_philo(t_philo *philo, t_data *data)
+void    init_fork(int id, int number_philo, t_philo *philo)
 {
-	philo->left_fork = 0;
-	philo->right_fork = 0;
-	philo->philo_id = 0;
+    if (id == number_philo)
+    {
+        philo->left_fork = id;
+        philo->right_fork = 1;
+    }
+    else
+    {
+        philo->left_fork = id;
+        philo->right_fork = id + 1;
+    }
+}
+
+void	init_struct_philo(t_philo *philo, t_data *data, int id)
+{
+    init_fork(id, data->number_of_philo, philo);
+	philo->philo_id = id;
     philo->nbr_eat = data->number_eat;
     philo->data = data;
 }
@@ -54,27 +67,40 @@ void    routine_eat(t_philo *philo)
     //Quand il a les deux fourchette il peut manger
     //Puis il dort quqnd il a fini et il libere les fourchette
     int id;
-    
+    t_data *data;
+
+    data = philo->data;
     id = philo->philo_id;
-    pthread_mutex_lock(&(philo->data->fork[id]));
-    printf("Fourchette id = %d\n", id);
-    pthread_mutex_unlock(&(philo->data->fork[id]));
+    pthread_mutex_lock(&(data->fork[philo->left_fork]));
+    printf("Philosopher %d take left fork\n", id);
+    pthread_mutex_lock(&(data->fork[philo->right_fork]));
+    printf("Philosopher %d take right fork\n", id);
+    pthread_mutex_lock(&(data->eat));
+    printf("Philosopher %d is eating\n", id);
+    usleep(data->time_to_eat);
+    pthread_mutex_unlock(&(data->eat));
+    printf("Philosopher %d is sleeping\n", id);
+    usleep(data->time_to_sleep);
+    pthread_mutex_unlock(&(data->fork[philo->left_fork]));
+    pthread_mutex_unlock(&(data->fork[philo->right_fork]));
 }
 
 void    *routine(void *test_philo)
 {
     t_philo *philo;
-    int     id;
+    //int     id;
 
     philo = (t_philo *)test_philo;
-    id = philo->philo_id;
+    //id = philo->philo_id;
+    if (philo->philo_id % 2)
+	    usleep(150000);
     while (philo->nbr_eat)
     {
         routine_eat(philo);
-        pthread_mutex_lock(&(philo->eat));
-        printf("eat number == %d of philo number %d\n",philo->nbr_eat,  id);
-        //philo->nbr_eat--;
-        pthread_mutex_unlock(&(philo->eat));
+        //apres manger on doit dormir et penser
+        //calculer le temps
+        printf("Philosopher %d is thinking\n", philo->philo_id);
+        usleep(50);
         philo->nbr_eat--;
     }
     return (NULL);
@@ -84,20 +110,19 @@ int creat_philo(t_data *data, t_philo *philo)
 {
 	int	i;
 
-	i = 0;
-    if (data->number_of_philo < 1 || data->time_to_die < 1 || data->time_to_eat < 1
-			|| data->time_to_sleep < 1)
-        return 0;
-	while (i < data->number_of_philo)
+	i = 1;
+    //if (data->number_of_philo < 1 || data->time_to_die < 1 || data->time_to_eat < 1
+	//		|| data->time_to_sleep < 1)
+     //   return 0;
+	while (i <= data->number_of_philo)
 	{
-		init_struct_philo(&philo[i], data);
-		philo[i].philo_id = i;
+		init_struct_philo(&philo[i], data, i);
         pthread_create(&(philo[i].thread), NULL, routine, &(philo[i]));
         i++;
         //verif le tread 
 	}
-    i = 0;
-    while (i < data->number_of_philo)
+    i = 1;
+    while (i <= data->number_of_philo)
 	{
         pthread_join(philo[i].thread, NULL);
         //verif le tread 
@@ -110,15 +135,18 @@ int	init_mutex(int argc, t_data *data, t_philo *philo)
 {
 	int	i;
     (void)argc;
+    (void)philo;
 
-	i = 0;
-	while (i < data->number_of_philo)
+	i = 1;
+	while (i <= data->number_of_philo)
 	{
         pthread_mutex_init(&data->fork[i], NULL);
-        if (data->number_eat > 0)
-            pthread_mutex_init(&philo[i].eat, NULL);
+        //if (data->number_eat > 0)
+            //pthread_mutex_init(&philo[i].eat, NULL);
 		i++;
 	}
+    pthread_mutex_init(&(data->write), NULL);
+	pthread_mutex_init(&(data->eat), NULL);
 	return (1);
 }
 
