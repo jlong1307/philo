@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2021/12/16 12:56:19 by jlong            ###   ########.fr       */
+/*   Updated: 2021/12/16 15:31:42 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,6 @@ void    *routine(void *test_philo)
 
     philo = (t_philo *)test_philo;
     //id = philo->philo_id;
-    if (philo->philo_id % 2)
-	    usleep(150000);
     while (philo->nbr_eat)
     {
         routine_eat(philo);
