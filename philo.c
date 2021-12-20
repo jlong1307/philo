@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
+/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2021/12/16 15:31:42 by jlong            ###   ########.fr       */
+/*   Updated: 2021/12/20 12:47:30 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_data  *get_data(int argc, char **av)
         else
             data->number_eat = 1;
     }
+    //verifie les donnes 
     return (data);
 }
 
@@ -72,14 +73,22 @@ void    routine_eat(t_philo *philo)
     data = philo->data;
     id = philo->philo_id;
     pthread_mutex_lock(&(data->fork[philo->left_fork]));
-    printf("Philosopher %d take left fork\n", id);
+    //printf("%lli ", timestamp() - data->start);
+   // printf("philosopher %d take left fork\n", id);
+    check_write(philo, id, "take left fork");
     pthread_mutex_lock(&(data->fork[philo->right_fork]));
-    printf("Philosopher %d take right fork\n", id);
+   // printf("%lli ", timestamp() - data->start);
+   // printf("philosopher %d take right fork\n", id);
+    check_write(philo, id, "take right fork");
     pthread_mutex_lock(&(data->eat));
-    printf("Philosopher %d is eating\n", id);
+   // printf("%lli ", timestamp() - data->start);
+   // printf("philosopher %d is eating\n", id);
+    check_write(philo, id, "is eating");
     usleep(data->time_to_eat);
     pthread_mutex_unlock(&(data->eat));
-    printf("Philosopher %d is sleeping\n", id);
+   // printf("%lli ", timestamp() - data->start);
+   // printf("philosopher %d is sleeping\n", id);
+    check_write(philo, id, "is sleeping");
     usleep(data->time_to_sleep);
     pthread_mutex_unlock(&(data->fork[philo->left_fork]));
     pthread_mutex_unlock(&(data->fork[philo->right_fork]));
@@ -92,12 +101,15 @@ void    *routine(void *test_philo)
 
     philo = (t_philo *)test_philo;
     //id = philo->philo_id;
+    if (philo->philo_id % 2)
+        usleep(50);
     while (philo->nbr_eat)
     {
         routine_eat(philo);
         //apres manger on doit dormir et penser
         //calculer le temps
-        printf("Philosopher %d is thinking\n", philo->philo_id);
+        printf("%lli ", timestamp() - philo->data->start);
+        printf("%d is thinking\n", philo->philo_id);
         usleep(50);
         philo->nbr_eat--;
     }
@@ -109,13 +121,12 @@ int creat_philo(t_data *data, t_philo *philo)
 	int	i;
 
 	i = 1;
-    //if (data->number_of_philo < 1 || data->time_to_die < 1 || data->time_to_eat < 1
-	//		|| data->time_to_sleep < 1)
-     //   return 0;
+    data->start = timestamp();
 	while (i <= data->number_of_philo)
 	{
 		init_struct_philo(&philo[i], data, i);
         pthread_create(&(philo[i].thread), NULL, routine, &(philo[i]));
+        philo[i].time_l_eat = timestamp();
         i++;
         //verif le tread 
 	}
