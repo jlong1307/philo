@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
+/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/26 11:19:08 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/26 14:47:00 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ void    routine_eat(t_philo *philo)
     pthread_mutex_unlock(&(data->eat));
     pthread_mutex_unlock(&(data->fork[philo->left_fork]));
     pthread_mutex_unlock(&(data->fork[philo->right_fork]));
-
-    check_write(philo, id, "is sleeping");
-    usleep(data->time_to_sleep);
+}
+void    check_all_eat(t_philo *philo)
+{
+    if (philo->data->start )
 }
 
 void    *routine(void *test_philo)
@@ -54,6 +55,10 @@ void    *routine(void *test_philo)
         //apres manger on doit dormir et penser
         //calculer le temps
         //Mettre un break si ils ont tous mangé
+        if (philo->nbr_eat == 0)
+            break ;
+        check_write(philo, philo->philo_id, "is sleeping");
+        usleep(philo->data->time_to_sleep);
         check_write(philo, philo->philo_id, "is thinking");
     }
     return (NULL);
@@ -70,7 +75,6 @@ int creat_philo(t_data *data, t_philo *philo)
 		init_struct_philo(&philo[i], data, i);
         if (pthread_create(&(philo[i].thread), NULL, routine, &(philo[i])))
             return (0);
-        philo[i].time_l_eat = timestamp();
         i++;
 	}
     i = 0;
@@ -78,7 +82,6 @@ int creat_philo(t_data *data, t_philo *philo)
 	{
         if (pthread_join(philo[i].thread, NULL))
             return (0);
-        //verif le tread 
 		i++;
 	}
     return (1);

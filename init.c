@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
+/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 10:29:56 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/26 11:18:39 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/26 14:36:08 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	get_data(char **av, t_data *data)
     data->time_to_die = ft_atoi(av[2]);
     data->time_to_eat = ft_atoi(av[3]);
     data->time_to_sleep = ft_atoi(av[4]);
-    data->isdead = 0;
+    data->isdead = 1;
     data->all_eat = 0;
 	if (data->number_of_philo < 2 || data->time_to_die < 1 || data->time_to_eat < 1
 		|| data->time_to_sleep < 1)
