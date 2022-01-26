@@ -3,16 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jlong <jlong@student.42.fr>                +#+  +:+       +#+         #
+#    By: jlong <jlong@student.s19.be>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/25 17:51:44 by jlong             #+#    #+#              #
-#    Updated: 2021/12/20 11:26:59 by jlong            ###   ########.fr        #
+#    Updated: 2022/01/26 10:33:21 by jlong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC			= philo \
 			ft_atoi \
 			philo_untils \
+			init \
 
 SRCS		= $(addsuffix .c, ${SRC})
 

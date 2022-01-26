@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:50:00 by jlong             #+#    #+#             */
-/*   Updated: 2021/12/20 13:34:09 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/26 10:47:25 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_data
 	int	number_eat;
 	long long	start;
 	int			isdead;
+	int			all_eat;
 	pthread_mutex_t fork[250];
 	pthread_mutex_t	eat;
 	pthread_mutex_t	write;
@@ -52,4 +53,8 @@ int			main(int argc, char **av);
 int			ft_atoi(const char *s);
 long long	timestamp(void);
 void		check_write(t_philo *philo, int id, char *str);
+int			get_data(char **av, t_data *data);
+int			init_mutex(int argc, t_data *data, t_philo *philo);
+void		init_struct_philo(t_philo *philo, t_data *data, int id);
+
 #endif
