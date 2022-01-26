@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:50:00 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/26 14:42:30 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/26 14:55:21 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct	s_philo
 	int				right_fork;
 	int				nbr_eat;
 	long long		time_l_eat;
-	long long		time_nl_eat;
+	long long		start;
 	t_data			*data;
 }				t_philo;
 

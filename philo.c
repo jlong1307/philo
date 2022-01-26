@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/26 14:47:00 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/26 15:48:16 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,29 @@ void    routine_eat(t_philo *philo)
     check_write(philo, id, "take right fork");
     pthread_mutex_lock(&(data->eat));
     check_write(philo, id, "is eating");
-    usleep(data->time_to_eat);
-    philo->time_l_eat = timestamp();
+    usleep(data->time_to_eat * 1000);
     philo->nbr_eat--;
     pthread_mutex_unlock(&(data->eat));
     pthread_mutex_unlock(&(data->fork[philo->left_fork]));
     pthread_mutex_unlock(&(data->fork[philo->right_fork]));
+    philo->time_l_eat = timestamp();
 }
-void    check_all_eat(t_philo *philo)
+
+void    check_is_dead(t_philo *philo)
 {
-    if (philo->data->start )
+    int start;
+    int last_meal;
+    int dif;
+
+    start = philo->start;
+    last_meal = philo->time_l_eat;
+    dif = last_meal - start;
+    if (dif < philo->data->time_to_die)
+        philo->data->isdead = 0;
+    else
+    {
+        philo->start = philo->time_l_eat;
+    }
 }
 
 void    *routine(void *test_philo)
@@ -48,19 +61,22 @@ void    *routine(void *test_philo)
 
     philo = (t_philo *)test_philo;
     if (philo->philo_id % 2)
-        usleep(500);
+        usleep(1500);
     while (philo->data->isdead)
     {
         routine_eat(philo);
         //apres manger on doit dormir et penser
         //calculer le temps
-        //Mettre un break si ils ont tous mangé
-        if (philo->nbr_eat == 0)
+        //regarder le temps du repas avec le precedent
+        check_is_dead(philo);
+        if (philo->nbr_eat == 0 || philo->data->isdead == 0)
             break ;
         check_write(philo, philo->philo_id, "is sleeping");
-        usleep(philo->data->time_to_sleep);
+        usleep(philo->data->time_to_sleep * 1000);
         check_write(philo, philo->philo_id, "is thinking");
     }
+    if (philo->data->isdead == 0)
+        printf("Philo is dead\n");
     return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 10:34:50 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/26 14:40:46 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/26 15:48:35 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	check_write(t_philo *philo, int id, char *str)
 		printf("%d ", id);
 		printf("%s\n", str);
 		pthread_mutex_unlock(&(data->write));
-		usleep(50);
 	}
 }
 

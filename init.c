@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 10:29:56 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/26 14:36:08 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/26 15:48:14 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	init_struct_philo(t_philo *philo, t_data *data, int id)
 	philo->philo_id = id + 1;
     philo->nbr_eat = data->number_eat;
     philo->data = data;
+	philo->time_l_eat = 0;
+	philo->start = data->start;
 }
 
 int	init_mutex(int argc, t_data *data, t_philo *philo)
