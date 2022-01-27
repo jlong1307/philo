@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/27 15:50:03 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/27 15:53:44 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,10 @@ void    routine_eat(t_philo *philo)
     check_write(philo, id, "take left fork");
     pthread_mutex_lock(&(data->fork[philo->right_fork]));
     check_write(philo, id, "take right fork");
-    //pthread_mutex_lock(&(data->eat));
     check_write(philo, id, "is eating");
     usleep(data->time_to_eat * 1000);
     philo->time_l_eat = timestamp();
     philo->nbr_eat--;
-    //pthread_mutex_unlock(&(data->eat));
     pthread_mutex_unlock(&(data->fork[philo->left_fork]));
     pthread_mutex_unlock(&(data->fork[philo->right_fork]));
 }
@@ -79,9 +77,6 @@ void    *routine(void *test_philo)
     while (!philo->data->isdead && check_all_eat(philo))
     {
         routine_eat(philo);
-        //apres manger on doit dormir et penser
-        //calculer le temps
-        //regarder le temps du repas avec le precedent
         check_is_dead(philo);
         if (philo->data->isdead != 0)
             break ;
