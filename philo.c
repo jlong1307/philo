@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/27 15:06:52 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/27 15:15:46 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void    check_is_dead(t_philo *philo)
     start = philo->start;
     last_meal = philo->time_l_eat;
     dif = last_meal - start;
-    if ((dif - 10) > philo->data->time_to_die)
+    if (dif > philo->data->time_to_die)
         philo->data->isdead = 0;
     else
     {
@@ -88,7 +88,7 @@ void    *routine(void *test_philo)
         check_write(philo, philo->philo_id, "is thinking");
     }
     if (philo->data->isdead == 0)
-        printf("%d Philo is dead\n", philo->philo_id);
+        check_write(philo, philo->philo_id, "is dead");
     return (NULL);
 }
 
@@ -105,7 +105,6 @@ int creat_philo(t_data *data, t_philo *philo)
             return (0);
         i++;
 	}
-    //regarder ici si un philo est mort
     i = 0;
     while (i < data->number_of_philo)
 	{
