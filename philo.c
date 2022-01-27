@@ -31,11 +31,11 @@ void    routine_eat(t_philo *philo)
     pthread_mutex_lock(&(data->eat));
     check_write(philo, id, "is eating");
     usleep(data->time_to_eat * 1000);
+    philo->time_l_eat = timestamp();
     philo->nbr_eat--;
     pthread_mutex_unlock(&(data->eat));
     pthread_mutex_unlock(&(data->fork[philo->left_fork]));
     pthread_mutex_unlock(&(data->fork[philo->right_fork]));
-    philo->time_l_eat = timestamp();
 }
 
 void    check_is_dead(t_philo *philo)
@@ -61,14 +61,14 @@ void    *routine(void *test_philo)
 
     philo = (t_philo *)test_philo;
     if (philo->philo_id % 2)
-        usleep(1500);
+        usleep(150);
     while (philo->data->isdead)
     {
         routine_eat(philo);
         //apres manger on doit dormir et penser
         //calculer le temps
         //regarder le temps du repas avec le precedent
-        check_is_dead(philo);
+        //check_is_dead(philo);
         if (philo->nbr_eat == 0 || philo->data->isdead == 0)
             break ;
         check_write(philo, philo->philo_id, "is sleeping");
@@ -118,7 +118,10 @@ int main(int argc, char **av)
         return (1);
     }
 	if (!init_mutex(argc, &data, philo))
-		return (1);
+	{
+        //free philo
+        return (1);
+    }
 	if (!creat_philo(&data, philo))
 	{
 		//free la struct

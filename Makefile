@@ -21,7 +21,7 @@ OBJS		= ${SRCS:.c=.o}
 				
 NAME		= philo
 
-CC			= gcc -pthread
+CC			= gcc
 RM			= rm -f
 RN			= ranlib
 
