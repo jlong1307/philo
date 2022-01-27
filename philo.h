@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:50:00 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/27 13:49:22 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/27 15:45:41 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <limits.h>
 # include <sys/time.h>
 
-
 typedef struct s_data
 {
 	int number_of_philo;
@@ -32,6 +31,7 @@ typedef struct s_data
 	int	number_eat;
 	long long	start;
 	int			isdead;
+	int			dead;
 	int			all_eat;
 	pthread_mutex_t fork[250];
 	pthread_mutex_t	eat;

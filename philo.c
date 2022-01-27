@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/27 15:15:46 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/27 15:50:03 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ void    check_is_dead(t_philo *philo)
     last_meal = philo->time_l_eat;
     dif = last_meal - start;
     if (dif > philo->data->time_to_die)
-        philo->data->isdead = 0;
+    {
+        philo->data->isdead = philo->philo_id;
+    }
     else
     {
         philo->start = philo->time_l_eat;
@@ -74,21 +76,25 @@ void    *routine(void *test_philo)
     philo = (t_philo *)test_philo;
     if (philo->philo_id % 2)
         usleep(150);
-    while (philo->data->isdead && check_all_eat(philo))
+    while (!philo->data->isdead && check_all_eat(philo))
     {
         routine_eat(philo);
         //apres manger on doit dormir et penser
         //calculer le temps
         //regarder le temps du repas avec le precedent
         check_is_dead(philo);
-        if (philo->data->isdead == 0)
-           break ;
+        if (philo->data->isdead != 0)
+            break ;
         check_write(philo, philo->philo_id, "is sleeping");
         usleep(philo->data->time_to_sleep * 1000);
         check_write(philo, philo->philo_id, "is thinking");
     }
-    if (philo->data->isdead == 0)
-        check_write(philo, philo->philo_id, "is dead");
+    usleep(1000);
+    if (philo->data->isdead != 0 && philo->data->dead)
+    {
+        philo->data->dead = 0;
+        printf("%lli %d is dead\n", timestamp() - philo->data->start, philo->philo_id);
+    }
     return (NULL);
 }
 
