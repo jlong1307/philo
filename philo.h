@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:50:00 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/27 15:45:41 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/28 11:47:06 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ void		check_write(t_philo *philo, int id, char *str);
 int			get_data(char **av, t_data *data);
 int			init_mutex(int argc, t_data *data, t_philo *philo);
 void		init_struct_philo(t_philo *philo, t_data *data, int id);
+int			end_mutex(t_data *data);
 
 #endif

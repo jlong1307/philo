@@ -6,16 +6,11 @@
 /*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:53:08 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/27 15:53:44 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/28 12:35:09 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	ft_error()
-{
-    printf("Number of arguments is not correct !\n");
-}
 
 void    routine_eat(t_philo *philo)
 {
@@ -73,7 +68,7 @@ void    *routine(void *test_philo)
 
     philo = (t_philo *)test_philo;
     if (philo->philo_id % 2)
-        usleep(150);
+        usleep(15000);
     while (!philo->data->isdead && check_all_eat(philo))
     {
         routine_eat(philo);
@@ -87,8 +82,10 @@ void    *routine(void *test_philo)
     usleep(1000);
     if (philo->data->isdead != 0 && philo->data->dead)
     {
+        pthread_mutex_lock(&(philo->data->write));
         philo->data->dead = 0;
         printf("%lli %d is dead\n", timestamp() - philo->data->start, philo->philo_id);
+        pthread_mutex_unlock(&(philo->data->write));
     }
     return (NULL);
 }
@@ -113,6 +110,8 @@ int creat_philo(t_data *data, t_philo *philo)
             return (0);
 		i++;
 	}
+    if (!end_mutex(data))
+        return (0);
     return (1);
 }
 
@@ -122,24 +121,31 @@ int main(int argc, char **av)
     t_philo	*philo;
 
     philo = NULL;
-    if (!get_data(av, &data))
-        return (1);
-    philo = malloc(sizeof(t_philo) * data.number_of_philo);
-    if (!philo)
+    if (argc < 5 || argc > 6)
     {
-        //free philo
+        printf("Number of argument is not correct !\n");
+        return (1);
+    }
+    if (!get_data(av, &data))
+    {
+        printf("Problem argument !\n");
+        return (1);
+    }
+    philo = malloc(sizeof(t_philo) * data.number_of_philo);
+    if (!(philo))
+    {
         return (1);
     }
 	if (!init_mutex(argc, &data, philo))
 	{
-        //free philo
+        free(philo);
         return (1);
     }
 	if (!creat_philo(&data, philo))
 	{
-		//free la struct
-        //free philo
+        free(philo);
 		return (1);
 	}
+    free(philo);
     return (0);
 }

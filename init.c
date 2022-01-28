@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 10:29:56 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/27 15:46:36 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/28 12:35:04 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,21 @@ int	init_mutex(int argc, t_data *data, t_philo *philo)
 	}
 	if (pthread_mutex_init(&(data->write), NULL))
 		return (0);
-	if (pthread_mutex_init(&(data->eat), NULL))
+	return (1);
+}
+
+int	end_mutex(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->number_of_philo)
+	{
+        if (pthread_mutex_destroy(&data->fork[i]))
+			return (0);
+		i++;
+	}
+	if (pthread_mutex_destroy(&(data->write)))
 		return (0);
 	return (1);
 }
