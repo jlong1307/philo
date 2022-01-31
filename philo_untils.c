@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 10:34:50 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/31 13:21:57 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/31 17:44:30 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,14 @@ long long	timestamp(void)
 
 	gettimeofday(&t, NULL);
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
+}
+
+void	ft_usleep(long int time_in_ms)
+{
+	long int	start_time;
+
+	start_time = 0;
+	start_time = timestamp();
+	while ((timestamp() - start_time) < time_in_ms)
+		usleep(time_in_ms / 10);
 }

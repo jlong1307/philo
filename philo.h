@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:50:00 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/31 13:20:14 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/31 17:37:51 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ void		check_is_dead(t_philo *philo);
 int			check_all_eat(t_philo *philo);
 int			check_argument(int argc);
 int			check_error_free(t_philo *philo);
+void		ft_usleep(long int time_in_ms);
 
 #endif

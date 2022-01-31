@@ -26,7 +26,7 @@ void	routine_eat(t_philo *philo)
 	pthread_mutex_lock(&(data->fork[philo->right_fork]));
 	check_write(philo, id, "take right fork");
 	check_write(philo, id, "is eating");
-	usleep(data->time_to_eat * 1000);
+	ft_usleep(data->time_to_eat);
 	philo->time_l_eat = timestamp();
 	philo->nbr_eat--;
 	pthread_mutex_unlock(&(data->fork[philo->left_fork]));
@@ -39,18 +39,18 @@ void	*routine(void *test_philo)
 
 	philo = (t_philo *)test_philo;
 	if (philo->philo_id % 2 && philo->data->number_of_philo > 1)
-		usleep(1500);
-	while (!philo->data->isdead && check_all_eat(philo))
+		usleep(10000);
+	while (!philo->data->isdead)
 	{
 		routine_eat(philo);
 		check_is_dead(philo);
-		if (philo->data->isdead != 0)
+		if (!check_all_eat(philo))
 			break ;
 		check_write(philo, philo->philo_id, "is sleeping");
-		usleep(philo->data->time_to_sleep * 1000);
+		ft_usleep(philo->data->time_to_sleep);
 		check_write(philo, philo->philo_id, "is thinking");
 	}
-	usleep(1000);
+	ft_usleep(1);
 	if (philo->data->isdead != 0 && philo->data->dead)
 	{
 		pthread_mutex_lock(&(philo->data->write));
