@@ -12,6 +12,24 @@
 
 #include "philo.h"
 
+int	check_fork(t_philo *philo, t_data *data)
+{
+    int nbr_philo;
+	int	id;
+
+    nbr_philo = philo->data->number_of_philo;
+	id = philo->philo_id;
+    if (nbr_philo < 2)
+    {
+        pthread_mutex_lock(&(data->fork[philo->left_fork]));
+        check_write(philo, id, "take left fork");
+        pthread_mutex_unlock(&(data->fork[philo->left_fork]));
+		philo->data->isdead = philo->philo_id;
+		return (1);
+    }
+	return (0);
+}
+
 void    routine_eat(t_philo *philo)
 {
     int id;
@@ -19,6 +37,8 @@ void    routine_eat(t_philo *philo)
 
     data = philo->data;
     id = philo->philo_id;
+	if (check_fork(philo, data))
+		return ;
     pthread_mutex_lock(&(data->fork[philo->left_fork]));
     check_write(philo, id, "take left fork");
     pthread_mutex_lock(&(data->fork[philo->right_fork]));
@@ -68,7 +88,7 @@ void    *routine(void *test_philo)
 
     philo = (t_philo *)test_philo;
     if (philo->philo_id % 2)
-        usleep(15000);
+        usleep(1000);
     while (!philo->data->isdead && check_all_eat(philo))
     {
         routine_eat(philo);

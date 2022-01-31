@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 10:29:56 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/31 13:20:16 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/31 13:29:56 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	get_data(char **av, t_data *data)
     data->isdead = 0;
 	data->dead = 1;
     data->all_eat = 0;
-	if (data->number_of_philo < 2 || data->time_to_die < 1 || data->time_to_eat < 1
+	if (data->number_of_philo < 1 || data->time_to_die < 1 || data->time_to_eat < 1
 		|| data->time_to_sleep < 1)
 		return (0);
 	if (av[5])
@@ -37,7 +37,10 @@ int	get_data(char **av, t_data *data)
 
 void	init_fork(int id, int number_philo, t_philo *philo)
 {
-    if (id == number_philo)
+	int	n;
+
+	n = id + 1;
+    if (n == number_philo)
     {
         philo->left_fork = id;
         philo->right_fork = 0;
