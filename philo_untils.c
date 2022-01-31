@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_untils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
+/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 10:34:50 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/28 12:37:28 by jlong            ###   ########.fr       */
+/*   Updated: 2022/01/31 13:21:57 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	check_write(t_philo *philo, int id, char *str)
 	pthread_mutex_lock(&(data->write));
 	if (philo->nbr_eat != 0 && !philo->data->isdead)
 	{
-		pthread_mutex_lock(&(data->write));
 		printf("%lli ", timestamp() - data->start);
 		printf("%d ", id);
 		printf("%s\n", str);
