@@ -14,9 +14,9 @@
 
 void	check_write(t_philo *philo, int id, char *str)
 {
-	t_data *data;
+	t_data	*data;
 
-    data = philo->data;
+	data = philo->data;
 	pthread_mutex_lock(&(data->write));
 	if (philo->nbr_eat != 0 && !philo->data->isdead)
 	{

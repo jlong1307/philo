@@ -63,14 +63,14 @@ void	init_struct_philo(t_philo *philo, t_data *data, int id)
 	philo->start = data->start;
 }
 
-int	init_mutex(t_data *data, t_philo *philo)
+int	init_mutex(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	while (i < data->number_of_philo)
 	{
-	if (pthread_mutex_init(&data->fork[i], NULL))
+		if (pthread_mutex_init(&data->fork[i], NULL))
 			return (0);
 		i++;
 	}
@@ -88,14 +88,14 @@ int	end_mutex(t_data *data, t_philo *philo)
 	i = 0;
 	while (i < data->number_of_philo)
 	{
-	if (pthread_join(philo[i].thread, NULL))
-	return (0);
+		if (pthread_join(philo[i].thread, NULL))
+			return (0);
 		i++;
 	}
 	i = 0;
 	while (i < data->number_of_philo)
 	{
-	if (pthread_mutex_destroy(&data->fork[i]))
+		if (pthread_mutex_destroy(&data->fork[i]))
 			return (0);
 		i++;
 	}
