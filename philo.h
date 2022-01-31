@@ -36,6 +36,7 @@ typedef struct s_data
 	pthread_mutex_t fork[250];
 	pthread_mutex_t	eat;
 	pthread_mutex_t	write;
+	pthread_mutex_t	death;
 }				t_data;
 
 typedef struct	s_philo
@@ -57,6 +58,6 @@ void		check_write(t_philo *philo, int id, char *str);
 int			get_data(char **av, t_data *data);
 int			init_mutex(int argc, t_data *data, t_philo *philo);
 void		init_struct_philo(t_philo *philo, t_data *data, int id);
-int			end_mutex(t_data *data);
+int			end_mutex(t_data *data, t_philo *philo);
 
 #endif

@@ -24,7 +24,7 @@ int	check_fork(t_philo *philo, t_data *data)
         pthread_mutex_lock(&(data->fork[philo->left_fork]));
         check_write(philo, id, "take left fork");
         pthread_mutex_unlock(&(data->fork[philo->left_fork]));
-		philo->data->isdead = philo->philo_id;
+		data->isdead = philo->philo_id;
 		return (1);
     }
 	return (0);
@@ -87,8 +87,8 @@ void    *routine(void *test_philo)
     t_philo *philo;
 
     philo = (t_philo *)test_philo;
-    if (philo->philo_id % 2)
-        usleep(1000);
+    if (philo->philo_id % 2 && philo->data->number_of_philo > 1)
+        usleep(15000);
     while (!philo->data->isdead && check_all_eat(philo))
     {
         routine_eat(philo);
@@ -99,15 +99,15 @@ void    *routine(void *test_philo)
         usleep(philo->data->time_to_sleep * 1000);
         check_write(philo, philo->philo_id, "is thinking");
     }
-    usleep(1000);
-    if (philo->data->isdead != 0 && philo->data->dead)
-    {
-        pthread_mutex_lock(&(philo->data->write));
-        philo->data->dead = 0;
-        printf("%lli %d is dead\n", timestamp() - philo->data->start, philo->philo_id);
-        pthread_mutex_unlock(&(philo->data->write));
+	usleep(1000);
+	if (philo->data->isdead != 0 && philo->data->dead)
+	{
+    	pthread_mutex_lock(&(philo->data->write));
+    	philo->data->dead = 0;
+    	printf("%lli %d is dead\n", timestamp() - philo->data->start, philo->philo_id);
+    	pthread_mutex_unlock(&(philo->data->write));
     }
-    return (NULL);
+	return (NULL);
 }
 
 int creat_philo(t_data *data, t_philo *philo)
@@ -123,14 +123,7 @@ int creat_philo(t_data *data, t_philo *philo)
             return (0);
         i++;
 	}
-    i = 0;
-    while (i < data->number_of_philo)
-	{
-        if (pthread_join(philo[i].thread, NULL))
-            return (0);
-		i++;
-	}
-    if (!end_mutex(data))
+    if (!end_mutex(data, philo))
         return (0);
     return (1);
 }
