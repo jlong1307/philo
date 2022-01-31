@@ -12,24 +12,6 @@
 
 #include "philo.h"
 
-int	check_fork(t_philo *philo, t_data *data)
-{
-	int	nbr_philo;
-	int	id;
-
-	nbr_philo = philo->data->number_of_philo;
-	id = philo->philo_id;
-	if (nbr_philo < 2)
-	{
-		pthread_mutex_lock(&(data->fork[philo->left_fork]));
-		check_write(philo, id, "take left fork");
-		pthread_mutex_unlock(&(data->fork[philo->left_fork]));
-		data->isdead = philo->philo_id;
-		return (1);
-	}
-	return (0);
-}
-
 void	routine_eat(t_philo *philo)
 {
 	int		id;
@@ -49,37 +31,6 @@ void	routine_eat(t_philo *philo)
 	philo->nbr_eat--;
 	pthread_mutex_unlock(&(data->fork[philo->left_fork]));
 	pthread_mutex_unlock(&(data->fork[philo->right_fork]));
-}
-
-void	check_is_dead(t_philo *philo)
-{
-	int	start;
-	int	last_meal;
-	int	dif;
-
-	start = philo->start;
-	last_meal = philo->time_l_eat;
-	dif = last_meal - start;
-	if (dif > philo->data->time_to_die)
-	{
-		philo->data->isdead = philo->philo_id;
-	}
-	else
-	{
-		philo->start = philo->time_l_eat;
-	}
-}
-
-int	check_all_eat(t_philo *philo)
-{
-	t_data	*data;
-
-	data = philo->data;
-	if (data->number_eat == -1)
-		return (1);
-	if (philo->nbr_eat > 0)
-		return (1);
-	return (0);
 }
 
 void	*routine(void *test_philo)
@@ -104,7 +55,8 @@ void	*routine(void *test_philo)
 	{
 		pthread_mutex_lock(&(philo->data->write));
 		philo->data->dead = 0;
-		printf("%lli %d is dead\n", timestamp() - philo->data->start, philo->philo_id);
+		printf("%lli ", timestamp() - philo->data->start);
+		printf("%d is dead\n", philo->philo_id);
 		pthread_mutex_unlock(&(philo->data->write));
 	}
 	return (NULL);
@@ -134,11 +86,8 @@ int	main(int argc, char **av)
 	t_philo	*philo;
 
 	philo = NULL;
-	if (argc < 5 || argc > 6)
-	{
-		printf("Number of argument is not correct !\n");
+	if (!check_argument(argc))
 		return (1);
-	}
 	if (!get_data(av, &data))
 	{
 		printf("Problem argument !\n");
@@ -146,19 +95,11 @@ int	main(int argc, char **av)
 	}
 	philo = malloc(sizeof(t_philo) * data.number_of_philo);
 	if (!(philo))
-	{
 		return (1);
-	}
 	if (!init_mutex(&data))
-	{
-		free(philo);
-		return (1);
-	}
+		return (check_error_free(philo));
 	if (!creat_philo(&data, philo))
-	{
-		free(philo);
-		return (1);
-	}
+		return (check_error_free(philo));
 	free(philo);
 	return (0);
 }

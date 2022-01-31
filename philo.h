@@ -59,5 +59,10 @@ int			get_data(char **av, t_data *data);
 int			init_mutex(t_data *data);
 void		init_struct_philo(t_philo *philo, t_data *data, int id);
 int			end_mutex(t_data *data, t_philo *philo);
+int			check_fork(t_philo *philo, t_data *data);
+void		check_is_dead(t_philo *philo);
+int			check_all_eat(t_philo *philo);
+int			check_argument(int argc);
+int			check_error_free(t_philo *philo);
 
 #endif

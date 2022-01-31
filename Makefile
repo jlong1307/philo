@@ -14,6 +14,7 @@ SRC			= philo \
 			ft_atoi \
 			philo_untils \
 			init \
+			check_untils \
 
 SRCS		= $(addsuffix .c, ${SRC})
 
