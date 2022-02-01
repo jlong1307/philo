@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*	*/
-/*	:::	  ::::::::   */
-/*   philo.c	:+:	  :+:	:+:   */
-/*	+:+ +:+	 +:+	 */
-/*   By: jlong <jlong@student.42.fr>	+#+  +:+	   +#+	*/
-/*	+#+#+#+#+#+   +#+	   */
-/*   Created: 2021/10/25 17:53:08 by jlong	 #+#	#+#	 */
-/*   Updated: 2022/01/31 13:23:49 by jlong	###   ########.fr	   */
-/*	*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/01 09:23:59 by jlong             #+#    #+#             */
+/*   Updated: 2022/02/01 10:10:48 by jlong            ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
@@ -33,6 +33,12 @@ void	routine_eat(t_philo *philo)
 	pthread_mutex_unlock(&(data->fork[philo->right_fork]));
 }
 
+void	routine_sleep(t_philo *philo)
+{
+	check_write(philo, philo->philo_id, "is sleeping");
+	ft_usleep(philo->data->time_to_sleep);
+}
+
 void	*routine(void *test_philo)
 {
 	t_philo	*philo;
@@ -44,20 +50,20 @@ void	*routine(void *test_philo)
 	{
 		routine_eat(philo);
 		check_is_dead(philo);
-		if (!check_all_eat(philo))
+		check_all_eat(philo);
+		if (philo->data->all_eat == philo->data->number_of_philo)
 			break ;
-		check_write(philo, philo->philo_id, "is sleeping");
-		ft_usleep(philo->data->time_to_sleep);
+		routine_sleep(philo);
 		check_write(philo, philo->philo_id, "is thinking");
 	}
 	ft_usleep(1);
 	if (philo->data->isdead != 0 && philo->data->dead)
 	{
-		pthread_mutex_lock(&(philo->data->write));
+		pthread_mutex_lock(&(philo->data->death));
 		philo->data->dead = 0;
 		printf("%lli ", timestamp() - philo->data->start);
 		printf("%d is dead\n", philo->philo_id);
-		pthread_mutex_unlock(&(philo->data->write));
+		pthread_mutex_unlock(&(philo->data->death));
 	}
 	return (NULL);
 }
@@ -97,7 +103,7 @@ int	main(int argc, char **av)
 	if (!(philo))
 		return (1);
 	if (!init_mutex(&data))
-		return (check_error_free(philo));
+		return (check_error_free_init(philo));
 	if (!creat_philo(&data, philo))
 		return (check_error_free(philo));
 	free(philo);

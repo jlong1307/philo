@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*	*/
-/*	:::	  ::::::::   */
-/*   init.c	 :+:	  :+:	:+:   */
-/*	+:+ +:+	 +:+	 */
-/*   By: jlong <jlong@student.42.fr>	+#+  +:+	   +#+	*/
-/*	+#+#+#+#+#+   +#+	   */
-/*   Created: 2022/01/26 10:29:56 by jlong	 #+#	#+#	 */
-/*   Updated: 2022/01/31 13:29:56 by jlong	###   ########.fr	   */
-/*	*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/01 09:24:18 by jlong             #+#    #+#             */
+/*   Updated: 2022/02/01 09:24:19 by jlong            ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
@@ -21,7 +21,8 @@ int	get_data(char **av, t_data *data)
 	data->isdead = 0;
 	data->dead = 1;
 	data->all_eat = 0;
-	if (data->number_of_philo < 1 || data->time_to_die < 1
+	if (data->number_of_philo < 1 || data->number_of_philo > 250
+		|| data->time_to_die < 1
 		|| data->time_to_eat < 1
 		|| data->time_to_sleep < 1)
 		return (0);
@@ -99,6 +100,8 @@ int	end_mutex(t_data *data, t_philo *philo)
 			return (0);
 		i++;
 	}
+	if (pthread_mutex_destroy(&(data->death)))
+		return (0);
 	if (pthread_mutex_destroy(&(data->write)))
 		return (0);
 	return (1);

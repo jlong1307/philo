@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 10:34:50 by jlong             #+#    #+#             */
-/*   Updated: 2022/01/31 17:44:30 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/01 09:11:57 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,18 @@ void	ft_usleep(long int time_in_ms)
 	start_time = timestamp();
 	while ((timestamp() - start_time) < time_in_ms)
 		usleep(time_in_ms / 10);
+}
+
+int	check_error_free_init(t_philo *philo)
+{
+	printf("Probleme mutex init !\n");
+	free(philo);
+	return (1);
+}
+
+int	check_error_free(t_philo *philo)
+{
+	printf("Probleme pthread create or end mutex\n");
+	free(philo);
+	return (1);
 }
