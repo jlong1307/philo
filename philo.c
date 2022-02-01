@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 09:23:59 by jlong             #+#    #+#             */
-/*   Updated: 2022/02/01 10:10:48 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/01 14:21:09 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ void	*routine(void *test_philo)
 		check_write(philo, philo->philo_id, "is thinking");
 	}
 	ft_usleep(1);
+	pthread_mutex_lock(&(philo->data->death));
 	if (philo->data->isdead != 0 && philo->data->dead)
 	{
-		pthread_mutex_lock(&(philo->data->death));
 		philo->data->dead = 0;
 		printf("%lli ", timestamp() - philo->data->start);
 		printf("%d is dead\n", philo->philo_id);
-		pthread_mutex_unlock(&(philo->data->death));
 	}
+	pthread_mutex_unlock(&(philo->data->death));
 	return (NULL);
 }
 
