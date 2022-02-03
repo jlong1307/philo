@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 13:49:56 by jlong             #+#    #+#             */
-/*   Updated: 2021/12/13 13:50:13 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/03 11:47:01 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	ft_atoi(const char *s)
 		tmp = res;
 		res *= 10;
 		res += s[i++] - 48;
-		if (res > LLONG_MAX || res < tmp)
+		if (res > LLONG_MAX || negative == -1)
 			return (ft_check_longmax(negative));
 	}
 	return (res * negative);

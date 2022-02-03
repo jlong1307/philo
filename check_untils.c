@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 13:49:56 by jlong             #+#    #+#             */
-/*   Updated: 2022/02/01 10:09:01 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/03 11:18:45 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ void	check_is_dead(t_philo *philo)
 	start = philo->start;
 	last_meal = philo->time_l_eat;
 	dif = last_meal - start;
-	if (dif > philo->data->time_to_die)
+	if (!philo->data->isdead && (dif > philo->data->time_to_die))
+	{
 		philo->data->isdead = philo->philo_id;
+	}
 	else
 		philo->start = philo->time_l_eat;
 }
