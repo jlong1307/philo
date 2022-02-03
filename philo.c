@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 09:23:59 by jlong             #+#    #+#             */
-/*   Updated: 2022/02/01 14:21:09 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/03 10:08:10 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,18 @@ void	*routine(void *test_philo)
 
 	philo = (t_philo *)test_philo;
 	if (philo->philo_id % 2 && philo->data->number_of_philo > 1)
-		usleep(10000);
+		ft_usleep(100);
 	while (!philo->data->isdead)
 	{
 		routine_eat(philo);
 		check_is_dead(philo);
 		check_all_eat(philo);
-		if (philo->data->all_eat == philo->data->number_of_philo)
+		if ((philo->data->all_eat == philo->data->number_of_philo)
+			|| philo->data->isdead)
 			break ;
 		routine_sleep(philo);
 		check_write(philo, philo->philo_id, "is thinking");
 	}
-	ft_usleep(1);
 	pthread_mutex_lock(&(philo->data->death));
 	if (philo->data->isdead != 0 && philo->data->dead)
 	{
