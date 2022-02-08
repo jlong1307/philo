@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 13:49:56 by jlong             #+#    #+#             */
-/*   Updated: 2022/02/03 11:18:45 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/08 15:41:42 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,31 @@ int	check_fork(t_philo *philo, t_data *data)
 	return (0);
 }
 
-void	check_is_dead(t_philo *philo)
+int	check_is_dead(t_philo *philo)
 {
-	int	start;
-	int	last_meal;
-	int	dif;
+	long long	dif;
 
-	start = philo->start;
-	last_meal = philo->time_l_eat;
-	dif = last_meal - start;
-	if (!philo->data->isdead && (dif > philo->data->time_to_die))
+	pthread_mutex_lock(&(philo->data->death_check));
+	dif = (timestamp() - philo->time_l_eat);
+	if (!philo->data->isdead && philo->data->dead_check
+		&& philo->time_l_eat == 0)
 	{
+		if (timestamp() - philo->start > philo->data->time_to_die)
+		{
+			philo->data->dead_check = 0;
+			philo->data->isdead = philo->philo_id;
+		}
+	}
+	else if (!philo->data->isdead && philo->data->dead_check
+		&& (dif >= philo->data->time_to_die))
+	{
+		philo->data->dead_check = 0;
 		philo->data->isdead = philo->philo_id;
 	}
-	else
-		philo->start = philo->time_l_eat;
+	pthread_mutex_unlock(&(philo->data->death_check));
+	if (philo->data->dead_check)
+		return (1);
+	return (0);
 }
 
 int	check_all_eat(t_philo *philo)

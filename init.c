@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 09:24:18 by jlong             #+#    #+#             */
-/*   Updated: 2022/02/03 11:47:00 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/08 11:47:57 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	get_data(char **av, t_data *data)
 	data->time_to_sleep = ft_atoi(av[4]);
 	data->isdead = 0;
 	data->dead = 1;
+	data->dead_check = 1;
 	data->all_eat = 0;
 	if (data->number_of_philo < 1 || data->number_of_philo > 250
 		|| data->time_to_die < 1
@@ -77,6 +78,8 @@ int	init_mutex(t_data *data)
 	}
 	if (pthread_mutex_init(&(data->death), NULL))
 		return (0);
+	if (pthread_mutex_init(&(data->death_check), NULL))
+		return (0);
 	if (pthread_mutex_init(&(data->write), NULL))
 		return (0);
 	return (1);
@@ -100,6 +103,8 @@ int	end_mutex(t_data *data, t_philo *philo)
 			return (0);
 		i++;
 	}
+	if (pthread_mutex_destroy(&(data->death_check)))
+		return (0);
 	if (pthread_mutex_destroy(&(data->death)))
 		return (0);
 	if (pthread_mutex_destroy(&(data->write)))

@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 17:50:00 by jlong             #+#    #+#             */
-/*   Updated: 2022/02/03 10:31:26 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/08 15:03:20 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,13 @@ typedef struct s_data
 	long long		start;
 	int				isdead;
 	int				dead;
+	int				dead_check;
 	int				all_eat;
 	pthread_mutex_t	fork[250];
 	pthread_mutex_t	eat;
 	pthread_mutex_t	write;
 	pthread_mutex_t	death;
+	pthread_mutex_t	death_check;
 }				t_data;
 
 typedef struct s_philo
@@ -61,11 +63,17 @@ int			init_mutex(t_data *data);
 void		init_struct_philo(t_philo *philo, t_data *data, int id);
 int			end_mutex(t_data *data, t_philo *philo);
 int			check_fork(t_philo *philo, t_data *data);
-void		check_is_dead(t_philo *philo);
+int			check_is_dead(t_philo *philo);
 int			check_all_eat(t_philo *philo);
 int			check_argument(int argc);
 int			check_error_free(t_philo *philo);
 int			check_error_free_init(t_philo *philo);
 void		ft_usleep(long int time_in_ms);
+void		routine_think(t_philo *philo);
+void		routine_eat(t_philo *philo);
+void		routine_sleep(t_philo *philo);
+void		*routine(void *test_philo);
+void		ft_usleep_bis(long int time_in_ms, t_philo philo);
+int			ft_check_time(t_philo *philo);
 
 #endif

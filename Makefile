@@ -6,7 +6,7 @@
 #    By: jlong <jlong@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/25 17:51:44 by jlong             #+#    #+#              #
-#    Updated: 2022/02/03 11:47:29 by jlong            ###   ########.fr        #
+#    Updated: 2022/02/08 15:59:10 by jlong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,8 @@ SRC			= philo \
 			philo_untils \
 			init \
 			check_untils \
+			routine \
+			time \
 
 SRCS		= $(addsuffix .c, ${SRC})
 
@@ -26,7 +28,7 @@ CC			= gcc
 RM			= rm -f
 RN			= ranlib
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -fsanitize=thread
 
 .c.o:
 			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
