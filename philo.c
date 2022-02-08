@@ -6,7 +6,7 @@
 /*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 09:23:59 by jlong             #+#    #+#             */
-/*   Updated: 2022/02/08 15:43:55 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/08 16:28:31 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	creat_philo(t_data *data, t_philo *philo)
 	while (i < data->number_of_philo)
 	{
 		init_struct_philo(&philo[i], data, i);
+		usleep(1000);
 		if (pthread_create(&(philo[i].thread), NULL, routine, &(philo[i])))
 			return (0);
 		i++;
