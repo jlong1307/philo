@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlong <jlong@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jlong <jlong@student.s19.be>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 13:49:56 by jlong             #+#    #+#             */
-/*   Updated: 2022/02/03 11:47:01 by jlong            ###   ########.fr       */
+/*   Updated: 2022/02/09 10:17:21 by jlong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	ft_atoi(const char *s)
 	unsigned long long	res;
 	int					i;
 	int					negative;
-	unsigned long long	tmp;
 
 	i = 0;
 	negative = 1;
@@ -47,7 +46,6 @@ int	ft_atoi(const char *s)
 	}
 	while (s[i] >= '0' && s[i] <= '9')
 	{
-		tmp = res;
 		res *= 10;
 		res += s[i++] - 48;
 		if (res > LLONG_MAX || negative == -1)
